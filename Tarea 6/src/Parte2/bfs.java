@@ -163,7 +163,7 @@ public class bfs {
 				}
 			}
 
-			System.out.println(ans);
+			System.out.println("los nodos conectados son: "+ans);
 
 
 
