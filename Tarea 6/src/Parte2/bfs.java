@@ -8,19 +8,47 @@ import java.util.List;
 
 import sun.misc.Queue;
 
-
+/**
+ * 
+ * @author hd.castellanos & a.trujilloa1
+ *
+ */
 public class bfs {
-
+	/**
+	 * Lista de los componentes conectados del grafo
+	 */
 	private static List<List> ans = new ArrayList<>();
-
+	/**
+	 * Clase nodo 
+	 *
+	 */
 	static class Node
 	{
+		/**
+		 * id del nodo
+		 */
+
 		int id;
+
+		/**
+		 * Atributo que indica si el nodo ha sido agregado a la cola
+		 */
 		boolean marcado1;
+
+		/**
+		 * Atributo que indica si el nodo ha sido eliminado de la cola
+		 */
 		boolean marcado2;
 
+		/**
+		 * Lista de los vecinos del nodo
+		 */
 		List<Node> vecinos;
 
+		/**
+		 * Crea un nuevo nodo con el id dado por parametro
+		 * @param pId id que se le va a saignar al nuevo nodo
+		 */
 		Node(int pId)
 		{
 			this.id=pId;
@@ -29,37 +57,54 @@ public class bfs {
 
 
 		}
+		/**
+		 * @return el valor de la marca para saber si ya fue agregado a la cola
+		 */
 		public boolean darMarca1(){
 			return marcado1;
 		}
 
 
-
+		/**
+		 * Marca el valor de agregado a la cola como verdadero
+		 */
 		public void marcar1(){
 			marcado1 = true;
 		}
 
+		/**
+		 * @return el valor de la marca para saber si ya fue eliminado de la cola 
+		 */
 		public boolean darMarca2(){
 			return marcado2;
 		}
 
 
-
+		/**
+		 * Marca el valor de elimado de la cola como verdadero
+		 */
 		public void marcar2(){
 			marcado2 = true;
 		}
 
-
+		/**
+		 * Agrega un vecino a la lista de vecinos del nodo
+		 * @param pVecino vecino a agregar
+		 */
 		public void addVecino(Node pVecino)
 		{
 			this.vecinos.add(pVecino);
 		}
-		public List<Node> getNeighbours() {
+		/**
+		 * @return la lista de vecinos del nodo
+		 */
+		public List<Node> getVecinos() {
 			return vecinos;
 		}
-		public void setNeighbours(List<Node> neighbours) {
-			this.vecinos = neighbours;
-		}
+
+		/**
+		 * @return el id del nodo
+		 */
 		public int getId () {
 			return this.id;
 		}
@@ -67,7 +112,6 @@ public class bfs {
 	}
 
 
-	static String RUTA = "./data/NoDirected.txt";
 
 	public static void main (String args[]) throws Exception {
 
@@ -79,7 +123,7 @@ public class bfs {
 
 		try {
 			// agrega todos los nodos
-			FileReader reader = new FileReader(RUTA);
+			FileReader reader = new FileReader(args[0]);
 			BufferedReader in = new BufferedReader(reader);
 			String line = in.readLine();
 			for( int i = 0; line != null; i++)
@@ -153,7 +197,7 @@ public class bfs {
 
 
 
-			for (Node vecino: pNodeA.getNeighbours()){
+			for (Node vecino: pNodeA.getVecinos()){
 				if (vecino.darMarca1() == false)
 					bfs(pNode,vecino,pCamino);
 
@@ -163,16 +207,7 @@ public class bfs {
 				pNode.dequeue().marcar2();
 		}
 
-
-
 	}
-
-
-
-
-
-
-
 
 }
 
