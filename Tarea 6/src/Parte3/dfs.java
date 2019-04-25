@@ -130,7 +130,7 @@ public class dfs {
 		try {
 			// agrega todos los nodos
 
-			FileReader reader = new FileReader(args[1]);
+			FileReader reader = new FileReader(args[0]);
 			BufferedReader in = new BufferedReader(reader);
 			String line = in.readLine();
 			for( int i = 0; line != null; i++)
@@ -163,9 +163,9 @@ public class dfs {
 
 			camino = new Stack<>();
 			for (Node actual : nodos){
-				
+				boolean[] recStack = new boolean[numeros.size()];
 				if (actual.darMarca1() == false) {
-					dfs(nodes1,actual,camino);
+					dfs(nodes1,actual,camino,recStack);
 				}
 			}
 
@@ -179,22 +179,25 @@ public class dfs {
 	}
 
 
-	public static void  dfs(Queue<Node> pNode, Node pNodeA, Stack<Integer> pOrder  ) throws Exception {
+	public static void  dfs(Queue<Node> pNode, Node pNodeA, Stack<Integer> pOrder, boolean[] pRec  ) throws Exception {
 
 		pNodeA.marcar1();
+		pRec[pNodeA.getId()] = true;
 		pNode.enqueue(pNodeA);
 		pOrder.push(pNodeA.getId());
 
 
 		for (Node vecino: pNodeA.getVecinos()){
-			if (vecino.darMarca1() == false) {
-				dfs(pNode,vecino,pOrder);
-			}
-			if (vecino.darMarca2() == false) {
+			if (pRec[vecino.getId()] == true) {
 				throw new Exception("tiene ciclos"); 
 			}
+			if (vecino.darMarca1() == false) {
+				dfs(pNode,vecino,pOrder,pRec);
+			}
+
 		}
-		
+		pRec[pNodeA.getId()] = false;
+
 
 		pNode.dequeue().marcar2();
 
