@@ -156,7 +156,7 @@ public class bfs {
 
 			// bfs
 			for (Node actual : nodos){
-				if (actual.darMarca1()==false){
+				if (!actual.darMarca1()){
 					List<Integer> camino = new ArrayList<>();
 					bfs(nodes1,actual,camino);
 					ans.add(camino);
@@ -191,19 +191,19 @@ public class bfs {
 	public static void  bfs(Queue<Node> pNode, Node pNodeA, List<Integer> pCamino  ) throws Exception {
 
 
-		if (pNodeA.darMarca1() == false){
+		if (!pNodeA.darMarca1()){
 			pNodeA.marcar1();
 			pNode.enqueue(pNodeA);
 
 
 
 			for (Node vecino: pNodeA.getVecinos()){
-				if (vecino.darMarca1() == false)
+				if (!vecino.darMarca1())
 					bfs(pNode,vecino,pCamino);
 
 			}
 			pCamino.add(pNodeA.getId());
-			if (pNode.isEmpty()==false)
+			if (!pNode.isEmpty())
 				pNode.dequeue().marcar2();
 		}
 
