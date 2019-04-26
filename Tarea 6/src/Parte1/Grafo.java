@@ -6,15 +6,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class Grafo {
 
-	static String RUTA = "./data/distances5.txt";
+	static String RUTA5 = "./data/distances5.txt";
+	static String RUTA100 = "./data/distances100.txt";
+	static String RUTA1000 = "./data/distances1000.txt";
+	static boolean fin = false;
+	static Scanner sc = new Scanner(System.in);
 
 	class Vertice{
 		int raiz, destino, peso;
-		
+
 		public Vertice() {
 			raiz = destino = peso = 0;
 		}
@@ -27,12 +32,12 @@ public class Grafo {
 		public Nodo(int id) {
 			this.id = id;
 		}
-		
+
 		public boolean marcado()
 		{
 			return marcado;
 		}
-		
+
 		public void setMarcado(boolean marcado)
 		{
 			this.marcado = marcado;
@@ -44,7 +49,7 @@ public class Grafo {
 			return 0;
 		}
 	}
-	
+
 	int vertice, nodo;
 	Vertice v[];
 	Nodo n[];
@@ -72,13 +77,21 @@ public class Grafo {
 			System.out.printf("%d \t\t %d\n", i, dist[i]); 
 	} 
 
-	public static void main(String[] args) throws Exception {
+	static void menu()
+	{
+		System.out.println("a. Para el grafo de distancia 5 oprimir el número 1");
+		System.out.println("b. Para el grafo de distancia 100 oprimir el número 2");
+		System.out.println("c. Para el grafo de distancia 1000 oprimir el número 3");
+		System.out.println("d. Para finalizar oprimir el número 4");
+	}
 
+	static void loadData( String ruta) throws IOException
+	{
 		List<String> numeros = new ArrayList<>();
 		String numero[];
 
 		try {
-			FileReader reader = new FileReader(RUTA);
+			FileReader reader = new FileReader(ruta);
 			BufferedReader in = new BufferedReader(reader);
 			String line = in.readLine();
 			for( int i = 0; line != null; i++)
@@ -119,17 +132,46 @@ public class Grafo {
 				if(Integer.parseInt(numero[i]) != -1){
 					matriz[j][i] = Integer.parseInt(numero[i]);
 				}
-				
+
 			}
 
 		}
-		
-		
-		
+
 		bellmanFord algoritmo = new bellmanFord(grafo, 0);
-		
+
 		dijkstra algoritmo2 = new dijkstra(grafo, 0);
-		
+
 		FloydWarshall algoritmo3 = new FloydWarshall(matriz);
+	}
+
+
+	public static void main(String[] args) throws Exception {
+
+		while(!fin){
+			menu();
+			String option = sc.nextLine();//Numero ingresado desde consola por el usuario
+			switch(option){
+			case "1":
+
+				loadData(RUTA5);
+
+				break;
+			case "2":
+
+				loadData(RUTA100);
+
+				break;
+
+			case "3":
+
+				loadData(RUTA1000);
+				break;
+				
+			case "4":
+				fin = true;
+
+			}
+		}
+
 	}
 }

@@ -1,0 +1,2 @@
+Parte 1:
+Para el funcionamiento de la parte 1, se cuenta con un menú en consola el cuál indica las opciones disponibles para implementar los algoritmos en los diferentes grafos. El orden de ejucución de los algoitmos es BellmanFord, Dijkstra y FloydWarshall.
