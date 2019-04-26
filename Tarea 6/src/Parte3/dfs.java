@@ -11,7 +11,7 @@ import sun.misc.Queue;
 
 
 public class dfs {
-	private static Stack<Integer> camino;
+	;
 	/**
 	 * Clase nodo 
 	 *
@@ -120,87 +120,110 @@ public class dfs {
 	}
 
 	public static void main (String args[]) throws Exception {
+		for (int count = 0; count<args.length;count++){
+		
+			Stack<Integer> camino = new Stack<>();
+			Queue<Node> nodes1 = new Queue<>();
 
-		Queue<Node> nodes1 = new Queue<>();
-
-		List<String> numeros = new ArrayList<>();
-		List<Node> nodos = new ArrayList<>(); 
-
-
-		try {
-			// agrega todos los nodos
-
-			FileReader reader = new FileReader(args[1]);
-			BufferedReader in = new BufferedReader(reader);
-			String line = in.readLine();
-			for( int i = 0; line != null; i++)
-			{
-				numeros.add(line);
-				Node nodo = new Node(i); 
-				nodos.add(nodo);
-				line = in.readLine();
-			}
-			// añadir a la matriz
-			int matriz[][] = new int [numeros.size()][numeros.size()];
-			for (int i = 0; i < numeros.size() ; i++) {
-				String parte = numeros.get(i);
-				String [] num = parte.split("	");
+			List<String> numeros = new ArrayList<>();
+			List<Node> nodos = new ArrayList<>(); 
 
 
-				for (int j = 0; j < numeros.size() ; j++) {
 
-					matriz [i][j] = Integer.parseInt(num[j]);
+			try {
+				// agrega todos los nodos
+
+				FileReader reader = new FileReader(args[count]);
+				BufferedReader in = new BufferedReader(reader);
+				String line = in.readLine();
+				for( int i = 0; line != null; i++)
+				{
+					numeros.add(line);
+					Node nodo = new Node(i); 
+					nodos.add(nodo);
+					line = in.readLine();
+				}
+				System.out.println("DFS para el grafo de "+numeros.size()+" "+"nodos");
+				
+				
+				// añadir a la matriz
+				int matriz[][] = new int [numeros.size()][numeros.size()];
+				for (int i = 0; i < numeros.size() ; i++) {
+					String parte = numeros.get(i);
+					String [] num = parte.split("	");
+
+
+					for (int j = 0; j < numeros.size() ; j++) {
+
+						matriz [i][j] = Integer.parseInt(num[j]);
+					}
+				}
+
+				// Añadir vecinos 
+				for (int i=0;i<numeros.size();i++){
+					Node actual = nodos.get(i);
+					for (int j = 0 ; j<numeros.size(); j++){
+						if (matriz[i][j] != -1 && matriz[i][j] != 0 ) actual.addVecino(nodos.get(j));
+					}
+				}
+
+				camino = new Stack<>();
+				boolean ciclo = false;
+				
+				for (Node actual : nodos){
+					if (ciclo == false ){
+						
+						boolean[] recStack = new boolean[numeros.size()];
+						if (actual.darMarca1() == false) {
+							ciclo = dfs(actual,recStack,nodes1,camino);
+						}
+					}
+					
+				}
+				if (ciclo){
+					System.out.println("El grafo de"+ " "+ numeros.size()+" "+ "nodos tiene ciclos" ); 
+				}
+				else {
+
+					System.out.println("Orden topologico para el grafo de  "+ numeros.size()+" "+ "nodos:"+ camino);
 				}
 			}
 
-			// Añadir vecinos 
-			for (int i=0;i<numeros.size();i++){
-				Node actual = nodos.get(i);
-				for (int j = 0 ; j<numeros.size(); j++){
-					if (matriz[i][j] != -1 && matriz[i][j] != 0 ) actual.addVecino(nodos.get(j));
-				}
+			catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			camino = new Stack<>();
-			for (Node actual : nodos){
-				boolean[] recStack = new boolean[numeros.size()];
-				if (actual.darMarca1() == false) {
-					dfs(nodes1,actual,camino,recStack);
-				}
-			}
-
-			System.out.println("Orden topologico para el grafo " + camino);
-
-		}
-
-		catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
 
-	public static void  dfs(Queue<Node> pNode, Node pNodeA, Stack<Integer> pOrder, boolean[] pRec  ) throws Exception {
+	public static boolean  dfs( Node pNodeA,boolean[] pRec, Queue<Node> pNode,Stack<Integer>pCamino  )throws Exception  {
 
+		
+		
+		pNode.enqueue(pNodeA);
+		
+		
+		if (pRec[pNodeA.getId()])return true;
+		if (pNodeA.marcado1){
+			return false;
+		}
+		pCamino.push(pNodeA.getId());
+		
+		
+		
 		pNodeA.marcar1();
 		pRec[pNodeA.getId()] = true;
-		pNode.enqueue(pNodeA);
-		pOrder.push(pNodeA.getId());
-
 
 		for (Node vecino: pNodeA.getVecinos()){
-			if (pRec[vecino.getId()] == true) {
-				throw new Exception("tiene ciclos"); 
-			}
-			if (vecino.darMarca1() == false) {
-				dfs(pNode,vecino,pOrder,pRec);
+	
+			if (dfs(vecino,pRec,pNode,pCamino)) {
+				return true;
 			}
 
 		}
 		pRec[pNodeA.getId()] = false;
 
-
-		pNode.dequeue().marcar2();
-
+		return false;
 
 	}
 

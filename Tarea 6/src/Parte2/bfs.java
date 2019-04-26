@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import sun.misc.Queue;
 
@@ -17,7 +18,7 @@ public class bfs {
 	/**
 	 * Lista de los componentes conectados del grafo
 	 */
-	private static List<List> ans = new ArrayList<>();
+	private static List<Stack> ans = new ArrayList<>();
 	/**
 	 * Clase nodo 
 	 *
@@ -157,7 +158,7 @@ public class bfs {
 			// bfs
 			for (Node actual : nodos){
 				if (!actual.darMarca1()){
-					List<Integer> camino = new ArrayList<>();
+					Stack<Integer> camino = new Stack<>();
 					bfs(nodes1,actual,camino);
 					ans.add(camino);
 				}
@@ -188,12 +189,13 @@ public class bfs {
 	 * @param pCamino camino al cual se debe agregar el nodo cuando se elimine de la cola 
 	 * @throws Exception si no se puede eliminar el elemento correctamente de la pila 
 	 */
-	public static void  bfs(Queue<Node> pNode, Node pNodeA, List<Integer> pCamino  ) throws Exception {
+	public static void  bfs(Queue<Node> pNode, Node pNodeA, Stack<Integer> pCamino  ) throws Exception {
 
 
 		if (!pNodeA.darMarca1()){
 			pNodeA.marcar1();
 			pNode.enqueue(pNodeA);
+			pCamino.push(pNodeA.getId());
 
 
 
@@ -202,7 +204,7 @@ public class bfs {
 					bfs(pNode,vecino,pCamino);
 
 			}
-			pCamino.add(pNodeA.getId());
+			
 			if (!pNode.isEmpty())
 				pNode.dequeue().marcar2();
 		}
