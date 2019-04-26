@@ -130,7 +130,7 @@ public class dfs {
 		try {
 			// agrega todos los nodos
 
-			FileReader reader = new FileReader(args[0]);
+			FileReader reader = new FileReader(args[1]);
 			BufferedReader in = new BufferedReader(reader);
 			String line = in.readLine();
 			for( int i = 0; line != null; i++)
